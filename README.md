@@ -172,6 +172,50 @@ printk(KERN_INFO "Welcome To EmbeTronicX");
     <li>pr_err – Print an error-level message. (ex. pr_err(“test error message\n”)).</li>
     <li>pr_warn – Print a warning-level message.</li>
 </ol>
+<h1>3. Passing Arguments</h1>
+<h2>Module Parameters Macros</h2>
+<ul>
+    <li>module_param()</li>
+    <li>module_param_array()</li>
+    <li>module_param_cb()</li>
+</ul>
+<p>There are several types of permissions:</p>
+<ul>
+    <li>S_IWUSR</li>
+    <li>S_IRUSR</li>
+    <li>S_IXUSR</li>
+    <li>S_IRGRP</li>
+    <li>S_IWGRP</li>
+    <li>S_IXGRP</li>
+</ul>
+<h3>module_param()</h3>
+<p>This macro is used to initialize the arguments. module_param takes three parameters: the name of the variable, its type, and a permissions mask to be used for an accompanying sysfs entry. The macro should be placed outside of any function and is typically found near the head of the source file. <b>module_param()</b> macro, defined in <b>linux/moduleparam.h</b>.</p>
+<pre>
+module_param(name, type, perm);
+</pre>
+<p>Numberous types are supported for module parameters:</p>
+<ul>
+    <li>bool</li>
+    <li>invbool</li>
+    <li>charp</li>
+    <li>int</li>
+    <li>long</li>
+    <li>short</li>
+    <li>uint</li>
+    <li>ulong</li>
+    <li>ushort</li>
+</ul>
+<h3>module_param_array()</h3>
+<p>This macro is used to send the array as an argument to the Linux device driver. Array parameters, where the values are supplied as a comma-separated list, are also supported by the module loader. To declare an array parameter:</p>
+<pre>
+module_param_array(name, type, num, perm);
+</pre>
+<p><b>name</b> is the name of your array</p>
+<p><b>type</b> is the type of the array elements</p>
+<p><b>num</b> is an integer variable(optional) otherwise NULL</p>
+<p><b>perm</b> is the usual permissions value</p>
+<h3>module_param_cb()</h3>
+<p>This macro is used to register the callback. Whenever the argument (parameter) got changed, this callback function will be called. I think you don’t understand. Let me explain it properly.</p>
 <h1>48. Reference</h1>
 <ol>
     <li>https://embetronicx.com/tutorials/linux/device-drivers/</li>
