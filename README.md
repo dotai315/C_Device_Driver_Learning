@@ -56,4 +56,4 @@ All my studying about linux device driver with c languages. Reference this cours
 <h2>What is Linux?</h2>
 <p>Linux is an open-source Unix-like operating system based on the Linux kernel, an operating system kernel first released on September 17, 1991, by Linus Torvalds. Linux is typically packaged as a Linux distribution.</p>
 <h2>Linux Architechture</h2>
-<img source="https://developer.ibm.com/developer/default/articles/l-linux-kernel/images/figure2.jpg">
+<img src="https://developer.ibm.com/developer/default/articles/l-linux-kernel/images/figure2.jpg">
