@@ -215,7 +215,7 @@ module_param_array(name, type, num, perm);
 <p><b>num</b> is an integer variable(optional) otherwise NULL</p>
 <p><b>perm</b> is the usual permissions value</p>
 <h3>module_param_cb()</h3>
-<p>This macro is used to register the callback. Whenever the argument (parameter) got changed, this callback function will be called. I think you don’t understand. Let me explain it properly.</p>
+<p>This macro is used to register the callback. Whenever the argument (parameter) got changed, this callback function will be called.</p>
 <h1>48. Reference</h1>
 <ol>
     <li>https://embetronicx.com/tutorials/linux/device-drivers/</li>
