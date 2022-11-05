@@ -216,6 +216,49 @@ module_param_array(name, type, num, perm);
 <p><b>perm</b> is the usual permissions value</p>
 <h3>module_param_cb()</h3>
 <p>This macro is used to register the callback. Whenever the argument (parameter) got changed, this callback function will be called.</p>
+<h1>4. Character Device Driver</h1>
+<h2>Character Device Driver Major Number and Minor Number</h2>
+<p>One of the basic features of the Linux kernel is that it abstracts the handling of devices. All hardware devices look like regular files; they can be opened, closed, read, and written using the same, standard, system calls that are used to manipulate files. To Linux, everything is a file. To write to the hard disk, you write to a file. To read from the keyboard is to read from a file. To store backups on a tape device is to write to a file. Even to read from memory is to read from a file. If the file from which you are trying to read or to which you are trying to write is a “normal” file, the process is fairly easy to understand: the file is opened and you read or write data. So the device driver also likes the file. The driver will create a special file for every hardware device. We can communicate with the hardware using those special files (device files).</p>
+<p>If you want to create a special file, we should know about the major number and minor number in the device driver. In this tutorial, we will learn the major and minor numbers.</p>
+<h2>Major and Minor Number</h2>
+<h3>Major Number</h3>
+<p>Traditionally, the major number identifies the driver associated with the device. A major number can also be shared by multiple device drivers. See <b>/proc/devices</b> to find out how major numbers are assigned on a running Linux instance.</p>
+<h3>Minor Number</h3>
+<p>The major number is to identify the corresponding driver. Many devices may use the same major number. So we need to assign the number to each device that is using the same major number. So, this is a minor number. In other words, The device driver uses the minor number <b>minor</b> to distinguish individual physical or logical devices.</p>
+<h2>Allocating Major and Minor Number</h2>
+<h3>Static Allocating</h3>
+<p>If you want to set a particular major number for your driver, you can use this method. This method will allocate that major number if it is available.</p>
+<pre>
+int register_chrdev_region(dev_t first, unsigned int count, char *name);
+</pre>
+<p>Here, <b>first</b> is the beginning device number of the range you would like to allocate.</p>
+<p><b>count</b> is the total number of contiguous device numbers you are requesting. Note that, if the <b>count</b> is large, the range you request could spill over to the next major number; but everything will still work properly as long as the number range you request is available.</p>
+<p><b>name</b> is the name of the device that should be associated with this number range; it will appear in <b>/proc/devices</b> and <b>sysfs</b>.</p>
+<p>The return value from <b>register_chrdev_region</b> will be 0 if the allocation was successfully performed. In case of error, a negative error code will be returned, and you will not have access to the requested region.</p>
+<p>The <b>dev_t</b> type (defined in <b>linux/types.h</b>) is used to hold device numbers—both the major and minor parts. dev_t is a 32-bit quantity with 12 bits set aside for the major number and 20 for the minor number.</p>
+<p>If you want to create the <b>dev_t</b> structure variable for your major and minor number</p>
+<pre>
+MKDEV(int major, int minor);
+</pre>
+<p>If you want to get your major number and minor number from <b>dev_t</b></p>
+<pre>
+<p>MAJOR(dev_t dev);</p>
+<p>MINOR(dev_t dev);</p>
+</pre>
+<p>If we don’t want the fixed major and minor numbers please use this method. This method will allocate the major number dynamically to your driver which is available.</p>
+<pre>
+int alloc_chrdev_region(dev_t *dev, unsigned int firstminor, unsigned int count, char *name);
+</pre>
+<p><b>dev</b> is an output-only parameter that will, on successful completion, hold the first number in your allocated range.</p>
+<p><b>firstminor</b> should be the requested first minor number to use; it is usually 0.</p>
+<p><b>count</b> is the total number of contiguous device numbers you are requesting.</p>
+<p><b>name</b> is the name of the device that should be associated with this number range; it will appear in /b>/proc/devices</b> and <b>sysfs</b></p>
+<h2>Unregister the Major and Minor Number</h2>
+<p>Regardless of how you allocate your device numbers, you should free them when they are no longer in use. Device numbers are freed with:</p>
+<pre>
+void unregister_chrdev_region(dev_t first, unsigned int count);
+</pre>
+<p>The usual place to call <b>unregister_chrdev_region</b> would be in your module’s cleanup function (Exit Function).</p>
 <h1>48. Reference</h1>
 <ol>
     <li>https://embetronicx.com/tutorials/linux/device-drivers/</li>
